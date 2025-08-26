@@ -42,7 +42,7 @@ nohup oc mirror -c ./ImageSetConfiguration.yaml \
   --from file://./ docker://quay.openshifty.duckdns.org:8443 --v2 \
   > oc-disk-to-mirror.out &
 
-3. **Generate installation artifacts**
+###3. **Generate installation artifacts**
    - Mirror OpenShift Relesae Images
 	```bash
 	#1. Mirror to disk: Mirror the image set to an archive.
@@ -56,20 +56,20 @@ nohup oc mirror -c ./ImageSetConfiguration.yaml \
    - Run `openshift-install create manifests`
    - Run `openshift-install create ignition-configs`
 
-5. **Provision bootstrap + masters**
+###5. **Provision bootstrap + masters**
    - Attach ignition files (via HTTP/pxe/iso)
    - Start bootstrap node
    - Start master nodes
 
-6. **Wait for bootstrap complete**
+###6. **Wait for bootstrap complete**
    ```bash
    openshift-install wait-for bootstrap-complete
 
-7. **Join worker nodes**
+###7. **Join worker nodes**
    ```bash
    oc get csr
    oc adm certificate approve <csr-name>
-8. **Verify cluster**
+###8. **Verify cluster**
    ```bash
    oc get nodes
    oc get co
