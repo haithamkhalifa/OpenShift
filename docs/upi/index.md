@@ -15,18 +15,20 @@ Unlike IPI (Installer-Provisioned Infrastructure), you must manually configure *
 
 ## UPI Workflow (High-level)
 
-1. **Prepare infrastructure**
-   - Create Deployer (Bastion) VM
-      - it will host the following services:
-         - DNS Server   -> dnsmasq
-         - DHCP Server  -> dnsmasq
-         - LoadBalancer -> haproxy
-         - Private Image Registry -> Red Hat Quay     
-   - Create VMs or physical hosts (Bootstrap, Control Plane, Workers)
-   - Allocate IPs, MAC addresses, VLANs
-   - Configure DNS (api + *.apps records)
-   - Configure Load Balancer (HAProxy, F5, Nginx, etc.)
-   - Configure DHCP (or static IPs)
+### 1. Prepare infrastructure
+- Create a **Deployer (Bastion) VM** that will host:
+  - DNS Server → `dnsmasq`
+  - DHCP Server → `dnsmasq`
+  - Load Balancer → `haproxy`
+  - Private Image Registry → Red Hat Quay  
+- Create VMs or physical hosts:
+  - **Bootstrap**
+  - **Control Plane (Masters)**
+  - **Workers**
+- Allocate IPs, MAC addresses, VLANs.  
+- Configure **DNS** (`api` + `*.apps` records).  
+- Configure **Load Balancer** (HAProxy, F5, Nginx, etc.).  
+- Configure **DHCP** (or use static IPs).  
 
 3. **Generate installation artifacts**
    - Create `install-config.yaml`
