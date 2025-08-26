@@ -1,15 +1,13 @@
 # OpenShift Installation — UPI (User-Provisioned Infrastructure)
 
-The **User-Provisioned Infrastructure (UPI)** method gives you full control over the infrastructure layer.  
-Unlike IPI (Installer-Provisioned Infrastructure), you must manually configure **networking, load balancing, DNS, DHCP, and storage**, then provide ignition files to bootstrap the cluster.
+The **User-Provisioned Infrastructure (UPI)** method gives you **full control** over the infrastructure layer.  
+Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manually configure:
 
----
-
-## When to use UPI?
-- ✅ Bare metal clusters
-- ✅ Custom lab environments (Proxmox, VMware, physical servers)
-- ✅ Disconnected / air-gapped installations
-- ✅ Advanced setups where you control DNS, DHCP, HAProxy, certificates
+- Networking  
+- Load balancing  
+- DNS  
+- DHCP  
+- Storage  
 
 ---
 
