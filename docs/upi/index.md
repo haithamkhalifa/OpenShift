@@ -11,22 +11,36 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 
 ---
 
-## UPI Workflow (High-level)
+## 🔹 UPI Workflow (High-level)
 
-### 1. Prepare infrastructure
-- Create a **Deployer (Bastion) VM** that will host:
-  - DNS Server → `dnsmasq`
-  - DHCP Server → `dnsmasq`
-  - Load Balancer → `haproxy`
-  - Private Image Registry → Red Hat Quay  
-- Create VMs or physical hosts:
+### 1. Prepare Infrastructure
+- Create a **Deployer (Bastion) VM** hosting:
+  - DNS server → `dnsmasq`
+  - DHCP server → `dnsmasq`
+  - Load balancer → `haproxy`
+  - Private image registry → **Red Hat Quay**
+- Provision VMs or physical hosts:
   - **Bootstrap**
   - **Control Plane (Masters)**
   - **Workers**
-- Allocate IPs, MAC addresses, VLANs.  
-- Configure **DNS** (`api` + `*.apps` records).  
-- Configure **Load Balancer** (HAProxy, F5, Nginx, etc.).  
-- Configure **DHCP** (or use static IPs).  
+- Allocate IPs, MAC addresses, VLANs  
+- Configure **DNS** (`api` + `*.apps` records)  
+- Configure **Load Balancer** (HAProxy, F5, Nginx, etc.)  
+- Configure **DHCP** (or assign static IPs)   
+
+### 2. Generate Installation Artifacts
+- **Mirror OpenShift Release Images**  
+
+```bash
+# 1. Mirror to disk: export the image set into an archive
+nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
+
+# 2. Transfer the archive to the disconnected network manually
+
+# 3. Disk to mirror: import the archive into your disconnected registry
+nohup oc mirror -c ./ImageSetConfiguration.yaml \
+  --from file://./ docker://quay.openshifty.duckdns.org:8443 --v2 \
+  > oc-disk-to-mirror.out &
 
 3. **Generate installation artifacts**
    - Mirror OpenShift Relesae Images
