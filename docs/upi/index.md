@@ -77,29 +77,11 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
                   - name: stable
               - name: cluster-logging
                 channels:
-                  - name: stable-6.3 
-              - name: odf-operator
-                channels:
-                  - name: stable-4.18
-              - name: ocs-operator
-                channels:
-                  - name: stable-4.18
-              - name: mcg-operator
-                channels:
-                  - name: stable-4.18			
-              - name: odf-csi-addons-operator
-                channels:
-                  - name: stable-4.18
-              - name: local-storage-operator
-                channels:
-                  - name: stable
         additionalImages: 
         additionalImages: 
          - name: registry.redhat.io/ubi8/ubi:latest
          - name: registry.redhat.io/ubi9/ubi@sha256:20f695d2a91352d4eaa25107535126727b5945bff38ed36a3e59590f495046f0
       EOF
-
-   ```bash
    # 1. Mirror to disk: export the image set into an archive
    nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
    # 2. Transfer the archive to the disconnected network manually
