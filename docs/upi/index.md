@@ -54,7 +54,51 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 - Configure **DHCP** (or assign static IPs)   
 
 ### 2. Generate Installation Artifacts
-- **Mirror OpenShift Release Images**  
+- **Mirror OpenShift Release Images**
+   ImageSetConfiguration.yaml
+   ```bash
+   cat <<'EOF' >ImageSetConfiguration.yaml
+      kind: ImageSetConfiguration
+      apiVersion: mirror.openshift.io/v2alpha1
+      mirror:
+        platform:
+          architectures:
+            - "amd64"
+          channels:
+          - name: stable-4.18 
+            minVersion: 4.18.1
+            maxVersion: 4.18.1
+          graph: true
+        operators:
+          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.18
+            packages:
+              - name: file-integrity-operator
+                channels:
+                  - name: stable
+              - name: cluster-logging
+                channels:
+                  - name: stable-6.3 
+              - name: odf-operator
+                channels:
+                  - name: stable-4.18
+              - name: ocs-operator
+                channels:
+                  - name: stable-4.18
+              - name: mcg-operator
+                channels:
+                  - name: stable-4.18			
+              - name: odf-csi-addons-operator
+                channels:
+                  - name: stable-4.18
+              - name: local-storage-operator
+                channels:
+                  - name: stable
+        additionalImages: 
+        additionalImages: 
+         - name: registry.redhat.io/ubi8/ubi:latest
+         - name: registry.redhat.io/ubi9/ubi@sha256:20f695d2a91352d4eaa25107535126727b5945bff38ed36a3e59590f495046f0
+      EOF
+
    ```bash
    # 1. Mirror to disk: export the image set into an archive
    nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
