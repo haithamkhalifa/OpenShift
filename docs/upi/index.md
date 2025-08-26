@@ -31,13 +31,13 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 ### 2. Generate Installation Artifacts
 - **Mirror OpenShift Release Images**  
    ```bash
-      # 1. Mirror to disk: export the image set into an archive
-      nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
-      # 2. Transfer the archive to the disconnected network manually
-      # 3. Disk to mirror: import the archive into your disconnected registry
-      nohup oc mirror -c ./ImageSetConfiguration.yaml \
-      --from file://./ docker://quay.openshifty.duckdns.org:8443 --v2 \
-      > oc-disk-to-mirror.out & 
+   # 1. Mirror to disk: export the image set into an archive
+   nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
+   # 2. Transfer the archive to the disconnected network manually
+   # 3. Disk to mirror: import the archive into your disconnected registry
+   nohup oc mirror -c ./ImageSetConfiguration.yaml \
+   --from file://./ docker://quay.openshifty.duckdns.org:8443 --v2 \
+   > oc-disk-to-mirror.out & 
 
 ### 3. **Generate installation artifacts**
    - Mirror OpenShift Relesae Images
