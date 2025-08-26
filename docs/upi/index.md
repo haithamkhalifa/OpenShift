@@ -22,6 +22,21 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
       ```
       # https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/disconnected_environments/index#installing-mirroring-creating-registry
       curl -LO https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz
+      ### INSTALL Quay ###	
+      ./mirror-registry install \
+        --quayHostname quay.openshifty.duckdns.org \
+        --quayRoot /registry/quayRoot \
+        --initPassword P@ssw0rd \
+        --initUser devops \
+        --quayStorage /registry/quayStorage \
+        --sqliteStorage /registry/sqliteStorage \
+        --ssh-key /home/devops/.ssh/id_rsa_quay \
+        --sslCert /registry/quayRoot/quay-config/fullchain.crt \
+        --sslKey /registry/quayRoot/quay-config/openshifty.duckdns.org.key \
+        --targetHostname quay.openshifty.duckdns.org \
+        --targetUsername devops \
+        --verbose
+
   - download and install needed tools
       ```bash 
       curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.18.21/oc-mirror.tar.gz
