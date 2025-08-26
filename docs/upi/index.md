@@ -55,7 +55,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 
 ### 2. Generate Installation Artifacts
 - **Mirror OpenShift Release Images**
-   ImageSetConfiguration.yaml
+   *ImageSetConfiguration.yaml
    ```bash
    cat <<'EOF' >ImageSetConfiguration.yaml
       kind: ImageSetConfiguration
