@@ -55,7 +55,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 
 ### 2. Generate Installation Artifacts
 - **Mirror OpenShift Release Images**
-   ```bash
+```bash
    # 1. Mirror to disk: export the image set into an archive
    nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
    # 2. Transfer the archive to the disconnected network manually
