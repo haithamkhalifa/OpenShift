@@ -19,6 +19,12 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
   - DHCP server → `dnsmasq`
   - Load balancer → `haproxy`
   - Private image registry → **Red Hat Quay**
+  - download needed tools
+      ```bash 
+      curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.18.21/oc-mirror.tar.gz
+      tar -xvzf oc-mirror.tar.gz
+      sudo mv oc-mirror /usr/local/bin/
+
 - Provision VMs or physical hosts:
   - **Bootstrap**
   - **Control Plane (Masters)**
