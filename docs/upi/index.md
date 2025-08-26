@@ -32,6 +32,16 @@ Unlike IPI (Installer-Provisioned Infrastructure), you must manually configure *
 
 3. **Generate installation artifacts**
    - Mirror OpenShift Relesae Images
+```bash
+#1. Mirror to disk: Mirror the image set to an archive.
+	#oc mirror -c <image_set_configuration> file://<file_path> --v2
+	nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
+
+#2. Disk transfer: Manually transfer the archive to the network of the disconnected mirror registry.
+#	scp
+#3. Disk to mirror: Mirror the image set from the archive to the target disconnected registry.
+	#oc mirror -c <image_set_configuration> --from file://<file_path> docker://<mirror_registry_url> --v2
+	nohup oc mirror -c ./ImageSetConfiguration.yaml --from file://./ docker://quay.openshifty.duckdns.org:8443 --v2 > oc-disk-to-mirror.out &
    - Create `install-config.yaml`
    - Run `openshift-install create manifests`
    - Run `openshift-install create ignition-configs`
