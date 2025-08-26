@@ -1,0 +1,38 @@
+site_name: OpenShift — From Zero to Cluster
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.sections
+    - toc.integrate
+    - content.code.copy
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+nav:
+  - Home: index.md
+  - Foundations:
+    - What is OCP: 00-foundations/what-is-ocp.md
+    - Architecture: 00-foundations/arch-core.md
+    - K8s vs OCP: 00-foundations/kubernetes-vs-openshift.md
+    - Prereqs: 00-foundations/prerequisites.md
+  - Install Methods:
+    - Assisted Installer: 10-install-methods/assisted-installer.md
+    - Agent-based: 10-install-methods/agent-based.md
+    - IPI: 10-install-methods/ipi.md
+    - UPI: 10-install-methods/upi.md
+  - Air-gapped:
+    - oc-mirror v2: 30-airgapped/oc-mirror-v2-overview.md
+    - ImageSet examples: 30-airgapped/imagesetconfig-examples.md
+    - Registry mirroring: 30-airgapped/registry-mirroring.md
+  - Storage (ODF): 40-storage/odf-overview.md
+  - Operators: 50-operators/operator-basics.md
+  - Security: 60-security/rbac-cheatsheet.md
+  - Day-2: 70-day2/node-scaling.md
+  - Labs:
+    - Proxmox lab: 90-labs/proxmox-lab.md
+    - Bare metal lab: 90-labs/baremetal-lab.md
+    - Cloud lab: 90-labs/cloud-lab.md
