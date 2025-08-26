@@ -16,7 +16,7 @@ Unlike IPI (Installer-Provisioned Infrastructure), you must manually configure *
 ## UPI Workflow (High-level)
 
 1. **Prepare infrastructure**
-   - Create VMs or physical hosts (Bootstrap, Control Plane, Workers)
+   - Create VMs or physical hosts (Deployer(Bastion),Bootstrap, Control Plane, Workers)
    - Allocate IPs, MAC addresses, VLANs
    - Configure DNS (api + *.apps records)
    - Configure Load Balancer (HAProxy, F5, Nginx, etc.)
