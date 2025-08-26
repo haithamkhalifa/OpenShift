@@ -31,24 +31,25 @@ Unlike IPI (Installer-Provisioned Infrastructure), you must manually configure *
 - Configure **DHCP** (or use static IPs).  
 
 3. **Generate installation artifacts**
+   - Mirror OpenShift Relesae Images
    - Create `install-config.yaml`
    - Run `openshift-install create manifests`
    - Run `openshift-install create ignition-configs`
 
-4. **Provision bootstrap + masters**
+5. **Provision bootstrap + masters**
    - Attach ignition files (via HTTP/pxe/iso)
    - Start bootstrap node
    - Start master nodes
 
-5. **Wait for bootstrap complete**
+6. **Wait for bootstrap complete**
    ```bash
    openshift-install wait-for bootstrap-complete
 
-6. **Join worker nodes**
+7. **Join worker nodes**
    ```bash
    oc get csr
    oc adm certificate approve <csr-name>
-7. **Verify cluster**
+8. **Verify cluster**
    ```bash
    oc get nodes
    oc get co
