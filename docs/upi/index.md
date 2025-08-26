@@ -16,31 +16,37 @@ Unlike IPI (Installer-Provisioned Infrastructure), you must manually configure *
 ## UPI Workflow (High-level)
 
 1. **Prepare infrastructure**
-   - Create VMs or physical hosts (Deployer(Bastion),Bootstrap, Control Plane, Workers)
+   - Create Deployer (Bastion) VM
+      - it will host the following services:
+         - DNS Server   -> dnsmasq
+         - DHCP Server  -> dnsmasq
+         - LoadBalancer -> haproxy
+         - Private Image Registry -> Red Hat Quay     
+   - Create VMs or physical hosts (Bootstrap, Control Plane, Workers)
    - Allocate IPs, MAC addresses, VLANs
    - Configure DNS (api + *.apps records)
    - Configure Load Balancer (HAProxy, F5, Nginx, etc.)
    - Configure DHCP (or static IPs)
 
-2. **Generate installation artifacts**
+3. **Generate installation artifacts**
    - Create `install-config.yaml`
    - Run `openshift-install create manifests`
    - Run `openshift-install create ignition-configs`
 
-3. **Provision bootstrap + masters**
+4. **Provision bootstrap + masters**
    - Attach ignition files (via HTTP/pxe/iso)
    - Start bootstrap node
    - Start master nodes
 
-4. **Wait for bootstrap complete**
+5. **Wait for bootstrap complete**
    ```bash
    openshift-install wait-for bootstrap-complete
 
-5. **Join worker nodes**
+6. **Join worker nodes**
    ```bash
    oc get csr
    oc adm certificate approve <csr-name>
-6. **Verify cluster**
+7. **Verify cluster**
    ```bash
    oc get nodes
    oc get co
