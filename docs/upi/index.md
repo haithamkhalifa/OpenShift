@@ -34,4 +34,6 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 - Disable the FW and SElinux.
 - hereunder all needed.
 ```bash 
-   sudo dnf install -y dnsmasq haproxy
+   sudo dnf install dnsmasq haproxy jq
+   wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq &&\
+    chmod +x /usr/local/bin/yq
