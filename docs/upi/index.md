@@ -27,6 +27,10 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 - Allocate IPs, MAC addresses, VLANs  
 - Configure **DNS** (`api` + `*.apps` records)  
 - Configure **Load Balancer** (HAProxy, F5, Nginx, etc.)  
-- Configure **DHCP** (or assign static IPs)   
+- Configure **DHCP** (or assign static IPs)
 
-![alt text](image.png)
+### 2. Deployer (Bastion) setup
+- Install RHEL8 or RHEL9 as os.
+- Disable the FW and SElinux.
+- ```bash 
+sudo dnf install -y dnsmasq haproxy
