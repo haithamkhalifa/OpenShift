@@ -14,6 +14,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 
 ## 🔹 UPI Workflow (High-level)
 ### 1. Network Details
+- ![cluster details](image.png)
 ### 2. Prepare Infrastructure
 - Create a **Deployer (Bastion) VM** hosting:
   - **DNS server → `dnsmasq`**
