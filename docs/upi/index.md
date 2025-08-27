@@ -33,4 +33,4 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 - Install RHEL8 or RHEL9 as os.
 - Disable the FW and SElinux.
 - ```bash 
-sudo dnf install -y dnsmasq haproxy
+   sudo dnf install -y dnsmasq haproxy
