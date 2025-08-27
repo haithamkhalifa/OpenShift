@@ -18,7 +18,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
   - DNS server → `dnsmasq`
   - DHCP server → `dnsmasq`
   - Load balancer → `haproxy`
-  - Private image registry → **Red Hat Quay**
+  - Private image registry → ``Red Hat Quay``
       ```
       # https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/disconnected_environments/index#installing-mirroring-creating-registry
       curl -LO https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz
