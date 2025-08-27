@@ -1,4 +1,4 @@
-# OpenShift Installation — UPI (User-Provisioned Infrastructure)
+# OpenShift Installation — UPI (User-Provisioned Infrastructure) - (Air-gapped)
 
 The **User-Provisioned Infrastructure (UPI)** method gives you **full control** over the infrastructure layer.  
 Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manually configure:
