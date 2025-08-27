@@ -32,5 +32,6 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 ### 2. Deployer (Bastion) setup
 - Install RHEL8 or RHEL9 as os.
 - Disable the FW and SElinux.
-- ```bash 
+- hereunder all needed.
+```bash 
    sudo dnf install -y dnsmasq haproxy
