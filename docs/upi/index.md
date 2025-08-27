@@ -15,35 +15,10 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 
 ### 1. Prepare Infrastructure
 - Create a **Deployer (Bastion) VM** hosting:
-  - DNS server → `dnsmasq`
-  - DHCP server → `dnsmasq`
-  - Load balancer → `haproxy`
-  - Private image registry → ``Red Hat Quay``
-      ```
-      # https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/disconnected_environments/index#installing-mirroring-creating-registry
-      curl -LO https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz
-      ### INSTALL Quay ###	
-      ./mirror-registry install \
-        --quayHostname quay.openshifty.duckdns.org \
-        --quayRoot /registry/quayRoot \
-        --initPassword P@ssw0rd \
-        --initUser devops \
-        --quayStorage /registry/quayStorage \
-        --sqliteStorage /registry/sqliteStorage \
-        --ssh-key /home/devops/.ssh/id_rsa_quay \
-        --sslCert /registry/quayRoot/quay-config/fullchain.crt \
-        --sslKey /registry/quayRoot/quay-config/openshifty.duckdns.org.key \
-        --targetHostname quay.openshifty.duckdns.org \
-        --targetUsername devops \
-        --verbose
-
-  - download and install needed tools
-      ```bash 
-      curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.18.21/oc-mirror.tar.gz
-      tar -xvzf oc-mirror.tar.gz
-      sudo mv oc-mirror /usr/local/bin/
-      mkdir ~/.docker/
-      cat ~/pull-secret.txt | jq . > ~/.docker/config.json #get pull-secret from [Red Hat Console](https://console.redhat.com/openshift/downloads)
+  - **DNS server → `dnsmasq`**
+  - **DHCP server → `dnsmasq`**
+  - **Load balancer → `haproxy`**
+  - **Private image registry → ``Red Hat Quay``**
 - Provision VMs or physical hosts:
   - **Bootstrap**
   - **Control Plane (Masters)**
