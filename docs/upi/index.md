@@ -13,7 +13,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 ---
 
 ## 🔹 UPI Workflow (High-level)
-### 1. Network Details
+### 1. Network/DNS Details
 ![cluster details](image.png)
 ![cluster details](image-1.png)
 ### 2. Prepare Infrastructure
