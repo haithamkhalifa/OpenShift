@@ -13,8 +13,8 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 ---
 
 ## 🔹 UPI Workflow (High-level)
-
-### 1. Prepare Infrastructure
+### 1. Network Details
+### 2. Prepare Infrastructure
 - Create a **Deployer (Bastion) VM** hosting:
   - **DNS server → `dnsmasq`**
   - **DHCP server → `dnsmasq`**
@@ -28,8 +28,11 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 - Configure **DNS** (`api` + `*.apps` records)  
 - Configure **Load Balancer** (HAProxy, F5, Nginx, etc.)  
 - Configure **DHCP** (or assign static IPs)
+- Download tools/CLIs
 
-### 2. Deployer (Bastion) setup
+
+## 🔹 UPI Workflow (Low-level)
+### 1. Deployer (Bastion) setup
 - Install RHEL9 as os.
 - Disable the FW and SElinux.
 - hereunder all needed.
