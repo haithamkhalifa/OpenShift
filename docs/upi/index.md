@@ -30,10 +30,22 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 - Configure **DHCP** (or assign static IPs)
 
 ### 2. Deployer (Bastion) setup
-- Install RHEL8 or RHEL9 as os.
+- Install RHEL9 as os.
 - Disable the FW and SElinux.
 - hereunder all needed.
 ```bash 
    sudo dnf install dnsmasq haproxy jq -y
    wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
    chmod +x /usr/local/bin/yq
+   curl -LO https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz
+   curl -LO https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/oc-mirror.rhel9.tar.gz
+
+   curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-amd64
+   curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.18.21/openshift-client-linux.tar.gz
+
+   tar -xvzf oc-mirror.tar.gz
+   sudo mv oc-mirror /usr/local/bin/
+   mkdir ~/.docker/
+   cat ~/pull-secret.txt | jq . > ~/.docker/config.json #get pull-secret from [Red Hat Console](https://console.redhat.com/openshift/downloads)
+   ssh-keygen -t rsa -f /home/$USER/.ssh/id_rsa_quay -N '' -q
+   ssh-keygen -t rsa -f /home/$USER/.ssh/id_rsa -N '' -q
