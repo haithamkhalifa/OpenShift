@@ -101,7 +101,7 @@ nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-di
 ssh-keygen -t rsa -f /home/$USER/.ssh/id_rsa_quay -N '' -q
 mkdir -p /registry/{quayRoot,quayStorage,sqliteStorage}
 mkdir -p /registry/quayRoot/quay-config/
-#generate a cert ssl or use let's encrypt
+#generate a cert ssl or use let's encrypt check https://github.com/haithamkhalifa/OpenShift/blob/master/docs/get-free-domain-with-valid-cert.md
 cp openshifty.duckdns.org.crt openshifty.duckdns.org.key fullchain.crt /registry/quayRoot/quay-config/
 ssh-copy-id devops@quay.openshifty.duckdns.org
 ### INSTALL Quay ###	
