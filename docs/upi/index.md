@@ -21,6 +21,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
   - **DNS server → `dnsmasq`**
   - **DHCP server → `dnsmasq`**
   - **Load balancer → `haproxy`**
+  - **NTP server → `chrony`**
   - **Private image registry → ``Red Hat Quay``**
 - Provision VMs or physical hosts:
   - **Bootstrap**
