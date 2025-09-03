@@ -18,7 +18,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 ![cluster details](image-1.png)
 ### 2. Prepare Infrastructure
 - Create a **Deployer (Bastion) VM** hosting:
-  - **Download tools/CLIs**
+  - **tools/CLIs**
   - **DNS server → `dnsmasq`**
   - **DHCP server → `dnsmasq`**
   - **Load balancer → `haproxy`**
