@@ -39,7 +39,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 ### 1. Deployer (Bastion) setup
 - Install RHEL9 as os.
 - Disable the FW and SElinux.
-- hereunder all needed.
+- hereunder all commands.
 ```bash 
    hostnamectl set-hostname bastion.openshifty.duckdns.org
    curl -LO https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz
@@ -51,7 +51,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
    wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
    
    chmod +x /usr/local/bin/yq
-   sudo dnf install dnsmasq haproxy jq -y
+   sudo dnf install dnsmasq haproxy jq chrony -y
    tar -xvzf oc-mirror.tar.gz
    sudo mv oc-mirror /usr/local/bin/
    mkdir ~/.docker/
@@ -62,3 +62,5 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
    sudo cp haproxy.cfg /etc/haproxy/haproxy.cfg # LB Config
    sudo systemctl enable --now dnsmasq
    sudo systemctl enable --now haproxy
+```
+- hereunder all commands.
