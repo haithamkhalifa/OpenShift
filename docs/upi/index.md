@@ -162,6 +162,7 @@ cat ocp4-install/manifests/image-digest-mirror-set.yaml
 butane 99-worker-chrony.bu -o 99-worker-chrony.yaml
 cp 99-worker-chrony.yaml 99-master-chrony.yaml
 sed -i 's/worker/master/g' 99-master-chrony.yaml
+cp 99-master-chrony.yaml 99-worker-chrony.yaml ocp4-install/manifests/
 
 ```
 
