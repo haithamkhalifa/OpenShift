@@ -14,6 +14,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 
 ## 🔹 UPI Workflow (High-level)
 ### 1. Network/DNS Details
+- Allocate IPs, MAC addresses, VLANs,DNS
 ![cluster details](image.png)
 ![cluster details](image-1.png)
 ### 2. Prepare Infrastructure
@@ -28,7 +29,6 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
   - **Bootstrap**
   - **Control Plane (Masters)**
   - **Workers**
-- Allocate IPs, MAC addresses, VLANs  
 - Configure **DNS** (`api` + `*.apps` records)  
 - Configure **Load Balancer** (HAProxy, F5, Nginx, etc.)  
 - Configure **DHCP** (or assign static IPs)
@@ -80,11 +80,23 @@ sudo systemctl enable --now dnsmasq
 sudo systemctl enable --now haproxy
 ```
 ### 2. Cluster setup
-##### 2.1 Install Mirror Registry#####
+
+##### 2.1 Mirror OpenShift Release Images to disk in Connected Environment 
 ```bash
 mkdir ~/.docker/
 #get pull-secret from [Red Hat Console](https://console.redhat.com/openshift/downloads)
 cat ~/pull-secret.txt | jq . > ~/.docker/config.json
+
+# 1. Mirror to disk: export the image set into an archive
+nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
+# 2. Transfer the archive to the disconnected network manually
+```
+
+
+
+
+##### 2.2 Install Mirror Registry
+```bash
 # ssh key to be used for quay
 ssh-keygen -t rsa -f /home/$USER/.ssh/id_rsa_quay -N '' -q
 mkdir -p /registry/{quayRoot,quayStorage,sqliteStorage}
@@ -106,17 +118,79 @@ ssh-copy-id devops@quay.openshifty.duckdns.org
 --targetHostname quay.openshifty.duckdns.org \
 --targetUsername devops \
 --verbose
+
+# add ~/.docker/config.json result of echo -n 'devops:P@ssw0rd' | base64 -w0 with quay.openshifty.duckdns.org:8443 
+mkdir ~/.docker/
+echo '{"auths":{"quay.openshifty.duckdns.org:8443":{"auth":"ZGV2b3BzOlBAc3N3MHJk"}}}' > ~/.docker/config.json
+podman login -u devops -p P@ssw0rd quay.openshifty.duckdns.org:8443 
 ```
-##### 2.2 Mirror OpenShift Release Images#####
+
+
+##### 2.3 Mirror OpenShift Release Images from disk to the loca private registery
 ```bash
-# 1. Mirror to disk: export the image set into an archive
-nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
-# 2. Transfer the archive to the disconnected network manually
 # 3. Disk to mirror: import the archive into your disconnected registry
 nohup oc mirror -c ./ImageSetConfiguration.yaml --from file://./ docker://quay.openshifty.duckdns.org:8443 --v2 > oc-disk-to-mirror.out & 
+
+#generated content will be used in install-config.yaml file
 ```
-##### 2.3 Create `install-config.yaml`#####
+
+##### 2.4 Extract openshift-install from mirrored content
+```bash
+export LOCAL_SECRET_JSON=~/.docker/config.json
+export LOCAL_REGISTRY=quay.openshifty.duckdns.org:8443
+export LOCAL_REPOSITORY=openshift/release-images
+export OCP_RELEASE=4.18.1
+export ARCHITECTURE=x86_64
+
+oc adm release extract -a ${LOCAL_SECRET_JSON} \
+  --idms-file=/registry/working-dir/cluster-resources/idms-oc-mirror.yaml \
+  --command=openshift-install \
+  ${LOCAL_REGISTRY}/${LOCAL_REPOSITORY}:${OCP_RELEASE}-${ARCHITECTURE}
+```
+
+##### 2.5 Create `install-config.yaml`
 ```yaml
-asds: asdsa
-asdasd: asddd
 ```
+
+##### 2.6 geneate manifests and customize it
+```bash
+openshift-install create manifests --dir=ocp4-install --log-level=debug
+sed -i 's/mastersSchedulable: true/mastersSchedulable: false/g' ocp4-install/manifests/cluster-scheduler-02-config.yml
+cat ocp4-install/manifests/image-digest-mirror-set.yaml
+
+#dowload https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/99-worker-chrony.bu and edit the ntp server ip/dns
+butane 99-worker-chrony.bu -o 99-worker-chrony.yaml
+cp 99-worker-chrony.yaml 99-master-chrony.yaml
+sed -i 's/worker/master/g' 99-master-chrony.yaml
+
+```
+
+##### 2.7 geneate ignition-configs
+```bash
+openshift-install create ignition-configs --dir=ocp4-install --log-level=debug
+```
+
+##### 2.8 Provision bootstrap + masters + workers
+- Make VM template with rhcos iso attached, allocate CPU, MEMORY and DISK, assure you enabled the hotplug/NUMA 
+- clone the template into cluster VMs and edit the MAC address
+- Start bootstrap node 
+- Start master nodes
+- Start Workers
+
+##### 2.9 Wait for bootstrap complete
+```bash
+openshift-install wait-for bootstrap-complete --dir=ocp4-install --log-level=debug
+```
+
+##### 2.10 Join worker nodes
+```bash
+oc get csr
+oc adm certificate approve <csr-name>
+```
+
+##### 2.11 Verify cluster
+```bash
+oc get nodes
+oc get co
+```
+
