@@ -38,29 +38,74 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 ## 🔹 UPI Workflow (Low-level)
 ### 1. Deployer (Bastion) setup
 - Install RHEL9 as os.
-- Disable the FW and SElinux.
-- hereunder all commands.
-```bash 
+- System-wide Configs.
+```bash
+   #Disable the FW and SElinux and configure hostname  
    hostnamectl set-hostname bastion.openshifty.duckdns.org
-   curl -LO https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz
-   curl -LO https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/oc-mirror.rhel9.tar.gz
-   curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-amd64
-   curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.18.21/openshift-client-linux.tar.gz
-   curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/openshift.conf
-   curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/haproxy.cfg
-   wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
-   
-   chmod +x /usr/local/bin/yq
-   sudo dnf install dnsmasq haproxy jq chrony -y
-   tar -xvzf oc-mirror.tar.gz
-   sudo mv oc-mirror /usr/local/bin/
-   mkdir ~/.docker/
-   cat ~/pull-secret.txt | jq . > ~/.docker/config.json #get pull-secret from [Red Hat Console](https://console.redhat.com/openshift/downloads)
-   ssh-keygen -t rsa -f /home/$USER/.ssh/id_rsa_quay -N '' -q
-   ssh-keygen -t rsa -f /home/$USER/.ssh/id_rsa -N '' -q
-   sduo cp openshift.conf /etc/dnsmasq.d/openshift.conf #DNS and DHCP Config
-   sudo cp haproxy.cfg /etc/haproxy/haproxy.cfg # LB Config
-   sudo systemctl enable --now dnsmasq
-   sudo systemctl enable --now haproxy
+   sudo systemctl disable --now firewalld
+   sudo setenforce 0
+   sudo sed -i "s/^SELINUX=.*/SELINUX=disabled/" /etc/selinux/config'
 ```
-- hereunder all commands.
+- Download needed Tools/CLIs.
+```bash 
+  mkdir ocp4-tools
+  cd ocp4-tools
+  # mirror-registery to be used as loca private image registry
+  curl -LO https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz
+  # oc-mirror client tool to mirror OCP images from Red Hat public registries to out local registry
+  curl -LO https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/oc-mirror.rhel9.tar.gz
+  # butane to convert yaml (configurations) to machineconfig
+  curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-amd64
+  # oc openshift client to interact with cluster, best to download oc for the same version of ocp 
+  # it contains oc, kubectl and helm 
+  curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.18.21/openshift-client-linux.tar.gz
+  # dnsmasq configuration, DHCP and DNS
+  curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/openshift.conf
+  # HAproxy LoadBalancer configuration
+  curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/haproxy.cfg
+  # yq to parse and validate yaml files
+  wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+```
+- Installing/Configuring Tools/CLIs.
+```bash 
+  cd ocp4-tools
+  sudo dnf install dnsmasq haproxy jq chrony -y
+  cp yq_linux_amd64 /usr/local/bin/yq
+  sudo chmod +x /usr/local/bin/yq
+  tar -xvzf oc-mirror.tar.gz
+  sudo mv oc-mirror /usr/local/bin/
+  sduo cp openshift.conf /etc/dnsmasq.d/openshift.conf
+  sudo cp haproxy.cfg /etc/haproxy/haproxy.cfg
+  sudo systemctl enable --now dnsmasq
+  sudo systemctl enable --now haproxy
+```
+### 2. Cluster setup
+- Install Mirror Registry and Mirror OCP v4.18.x Images.
+```bash
+   mkdir ~/.docker/
+   #get pull-secret from [Red Hat Console](https://console.redhat.com/openshift/downloads)
+   cat ~/pull-secret.txt | jq . > ~/.docker/config.json
+   # ssh key to be used for quay
+   ssh-keygen -t rsa -f /home/$USER/.ssh/id_rsa_quay -N '' -q
+   mkdir -p /registry/{quayRoot,quayStorage,sqliteStorage}
+   mkdir -p /registry/quayRoot/quay-config/
+   #generate a cert ssl or use let's encrypt
+   cp openshifty.duckdns.org.crt openshifty.duckdns.org.key fullchain.crt /registry/quayRoot/quay-config/
+   ssh-copy-id devops@quay.openshifty.duckdns.org
+      ### INSTALL Quay ###	
+      ./mirror-registry install \
+        --quayHostname quay.openshifty.duckdns.org \
+        --quayRoot /registry/quayRoot \
+        --initPassword P@ssw0rd \
+        --initUser devops \
+        --quayStorage /registry/quayStorage \
+        --sqliteStorage /registry/sqliteStorage \
+        --ssh-key /home/devops/.ssh/id_rsa_quay \
+        --sslCert /registry/quayRoot/quay-config/fullchain.crt \
+        --sslKey /registry/quayRoot/quay-config/openshifty.duckdns.org.key \
+        --targetHostname quay.openshifty.duckdns.org \
+        --targetUsername devops \
+        --verbose
+
+
+```
