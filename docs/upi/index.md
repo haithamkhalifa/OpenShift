@@ -80,7 +80,7 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
   sudo systemctl enable --now haproxy
 ```
 ### 2. Cluster setup
-- Install Mirror Registry and Mirror OCP v4.18.x Images.
+#### 2.1 Install Mirror Registry#####
 ```bash
    mkdir ~/.docker/
    #get pull-secret from [Red Hat Console](https://console.redhat.com/openshift/downloads)
@@ -92,20 +92,31 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
    #generate a cert ssl or use let's encrypt
    cp openshifty.duckdns.org.crt openshifty.duckdns.org.key fullchain.crt /registry/quayRoot/quay-config/
    ssh-copy-id devops@quay.openshifty.duckdns.org
-      ### INSTALL Quay ###	
-      ./mirror-registry install \
-        --quayHostname quay.openshifty.duckdns.org \
-        --quayRoot /registry/quayRoot \
-        --initPassword P@ssw0rd \
-        --initUser devops \
-        --quayStorage /registry/quayStorage \
-        --sqliteStorage /registry/sqliteStorage \
-        --ssh-key /home/devops/.ssh/id_rsa_quay \
-        --sslCert /registry/quayRoot/quay-config/fullchain.crt \
-        --sslKey /registry/quayRoot/quay-config/openshifty.duckdns.org.key \
-        --targetHostname quay.openshifty.duckdns.org \
-        --targetUsername devops \
-        --verbose
-
-
+   ### INSTALL Quay ###	
+   ./mirror-registry install \
+     --quayHostname quay.openshifty.duckdns.org \
+     --quayRoot /registry/quayRoot \
+     --initPassword P@ssw0rd \
+     --initUser devops \
+     --quayStorage /registry/quayStorage \
+     --sqliteStorage /registry/sqliteStorage \
+     --ssh-key /home/devops/.ssh/id_rsa_quay \
+     --sslCert /registry/quayRoot/quay-config/fullchain.crt \
+     --sslKey /registry/quayRoot/quay-config/openshifty.duckdns.org.key \
+     --targetHostname quay.openshifty.duckdns.org \
+     --targetUsername devops \
+     --verbose
+```
+#### 2.2 Mirror OpenShift Release Images#####
+```bash
+   # 1. Mirror to disk: export the image set into an archive
+   nohup oc mirror -c ./ImageSetConfiguration.yaml file://./ --v2 > oc-mirror-to-disk.out &
+   # 2. Transfer the archive to the disconnected network manually
+   # 3. Disk to mirror: import the archive into your disconnected registry
+   nohup oc mirror -c ./ImageSetConfiguration.yaml --from file://./ docker://quay.openshifty.duckdns.org:8443 --v2 > oc-disk-to-mirror.out & 
+```
+#### 2.3 Create `install-config.yaml`#####
+```yaml
+asds: asdsa
+asdasd: asddd
 ```
