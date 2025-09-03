@@ -14,7 +14,8 @@ Unlike **IPI (Installer-Provisioned Infrastructure)**, with UPI you must manuall
 
 ## 🔹 UPI Workflow (High-level)
 ### 1. Network/DNS Details
-- Allocate IPs, MAC addresses, VLANs,DNS
+- Allocate IPs, MAC addresses, VLANs,DNS.
+
 ![cluster details](image.png)
 ![cluster details](image-1.png)
 ### 2. Prepare Infrastructure
