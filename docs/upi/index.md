@@ -192,7 +192,7 @@ imageDigestSources:
 
 ##### 2.6 geneate manifests and customize it
 ```bash
-openshift-install create manifests --dir=ocp4-install --log-level=debug
+./openshift-install create manifests --dir=ocp4-install --log-level=debug
 sed -i 's/mastersSchedulable: true/mastersSchedulable: false/g' ocp4-install/manifests/cluster-scheduler-02-config.yml
 cat ocp4-install/manifests/image-digest-mirror-set.yaml
 
@@ -206,7 +206,7 @@ cp 99-master-chrony.yaml 99-worker-chrony.yaml ocp4-install/manifests/
 
 ##### 2.7 geneate ignition-configs
 ```bash
-openshift-install create ignition-configs --dir=ocp4-install --log-level=debug
+./openshift-install create ignition-configs --dir=ocp4-install --log-level=debug
 ```
 
 ##### 2.8 Provision bootstrap + masters + workers
@@ -233,7 +233,7 @@ openshift-install create ignition-configs --dir=ocp4-install --log-level=debug
 
 ##### 2.9 Wait for bootstrap complete
 ```bash
-openshift-install wait-for bootstrap-complete --dir=ocp4-install --log-level=debug
+./openshift-install wait-for bootstrap-complete --dir=ocp4-install --log-level=debug
 ```
 
 ##### 2.10 Join worker nodes
