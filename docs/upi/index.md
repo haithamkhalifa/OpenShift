@@ -225,9 +225,9 @@ _EOF_
 
 cat <<'_EOF_' | sudo tee /var/www/html/worker.sh
 sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/worker.ign /dev/vda
+_EOF_
 
 sudo chown -R 755 /var/www/html/
-_EOF_
 
 ```
 
