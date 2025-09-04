@@ -188,10 +188,10 @@ pullSecret: 'PULL_SECRET'
 sshKey: 'SSH_KEY'
 imageDigestSources:
 - mirrors:
-  - quay.openshifty.duckdns.org:8443/devops/ocp4/openshift/release
+  - quay.openshifty.duckdns.org:8443/openshift/release-images
   source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
 - mirrors:
-  - quay.openshifty.duckdns.org:8443/devops/ocp4/openshift/release-images
+  - quay.openshifty.duckdns.org:8443/openshift/release
   source: quay.io/openshift-release-dev/ocp-release
 ```
 
