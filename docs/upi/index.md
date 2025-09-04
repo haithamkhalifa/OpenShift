@@ -143,6 +143,8 @@ podman login -u devops -p P@ssw0rd quay.openshifty.duckdns.org:8443
 nohup oc mirror -c ./ImageSetConfiguration.yaml --from file://./ docker://quay.openshifty.duckdns.org:8443 --v2 > oc-disk-to-mirror.out & 
 
 #generated content will be used in install-config.yaml file and in extraction of openshift-install
+cat /registry/oc-mirror/working-dir/cluster-resources/idms-oc-mirror.yaml | yq -r .spec.imageDigestMirrors | egrep -v "\-\-\-"
+
 ```
 
 ##### 2.4 Extract openshift-install from mirrored content
