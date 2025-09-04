@@ -235,23 +235,23 @@ sudo chown -R 755 /var/www/html/
 - Make VM template with rhcos iso attached, allocate CPU, MEMORY and DISK, assure you enabled the hotplug/NUMA 
 - clone the template into cluster VMs and edit the MAC address
 - bootstrap node
- - change MAC
- - start VM
- - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/bootstrap.ign /dev/vda
- - snapshot
- - ssh and watch 
+  - change MAC
+  - start VM
+  - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/bootstrap.ign /dev/vda
+  - snapshot
+  - ssh and watch 
 - Start master nodes
- - change MAC
- - start VM
- - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/master.ign /dev/vda
- - snapshot
- - ssh and watch 
+  - change MAC
+  - start VM
+  - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/master.ign /dev/vda
+  - snapshot
+  - ssh and watch 
 - Start Workers
- - change MAC
- - start VM
- - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/worker.ign /dev/vda
- - snapshot
- - ssh and watch 
+  - change MAC
+  - start VM
+  - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/worker.ign /dev/vda
+  - snapshot
+  - ssh and watch 
 
 ##### 2.9 Wait for bootstrap complete
 ```bash
