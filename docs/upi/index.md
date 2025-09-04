@@ -66,6 +66,8 @@ curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/m
 # HAproxy LoadBalancer configuration
 curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/haproxy.cfg
 curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/haproxy-systemd-override.conf
+# Chrony NTP configuration
+curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/chrony.conf
 # yq to parse and validate yaml files
 wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
 ```
@@ -79,11 +81,14 @@ tar -xvzf oc-mirror.tar.gz
 sudo mv oc-mirror /usr/local/bin/
 sduo cp openshift.conf /etc/dnsmasq.d/openshift.conf
 sudo cp haproxy.cfg /etc/haproxy/haproxy.cfg
+sudo cp chrony.conf /etc/chrony.conf
 mkdir /etc/systemd/system/dnsmasq.service.d/ /etc/systemd/system/haproxy.service.d/
 sudo cp dnsmasq-systemd-override.conf /etc/systemd/system/dnsmasq.service.d/override.conf
 sudo cp haproxy-systemd-override.conf /etc/systemd/system/haproxy.service.d/override.conf 
+sudo systemctl daemon-reload
 sudo systemctl enable --now dnsmasq
 sudo systemctl enable --now haproxy
+sudo systemctl enable --now chronyd
 ```
 ### 2. Cluster setup
 
