@@ -137,7 +137,7 @@ podman login -u devops -p P@ssw0rd quay.openshifty.duckdns.org:8443
 # 3. Disk to mirror: import the archive into your disconnected registry
 nohup oc mirror -c ./ImageSetConfiguration.yaml --from file://./ docker://quay.openshifty.duckdns.org:8443 --v2 > oc-disk-to-mirror.out & 
 
-#generated content will be used in install-config.yaml file
+#generated content will be used in install-config.yaml file and in extraction of openshift-install
 ```
 
 ##### 2.4 Extract openshift-install from mirrored content
@@ -146,10 +146,11 @@ export LOCAL_SECRET_JSON=~/.docker/config.json
 export LOCAL_REGISTRY=quay.openshifty.duckdns.org:8443
 export LOCAL_REPOSITORY=openshift/release-images
 export OCP_RELEASE=4.18.1
+export IDMS=/registry/oc-mirror/working-dir/cluster-resources/idms-oc-mirror.yaml
 export ARCHITECTURE=x86_64
 
 oc adm release extract -a ${LOCAL_SECRET_JSON} \
-  --idms-file=/registry/working-dir/cluster-resources/idms-oc-mirror.yaml \
+  --idms-file=${IDMS} \
   --command=openshift-install \
   ${LOCAL_REGISTRY}/${LOCAL_REPOSITORY}:${OCP_RELEASE}-${ARCHITECTURE}
 ```
