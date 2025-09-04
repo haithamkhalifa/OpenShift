@@ -237,21 +237,35 @@ sudo chown -R 755 /var/www/html/
 - bootstrap node
   - change MAC
   - start VM
-  - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/bootstrap.ign /dev/vda
-  - snapshot
-  - ssh and watch 
-- Start master nodes
+  - Open the VM from console, type the following and take a snapshot, dont run the command now
+    - curl http://10.10.10.2:8081/bootstrap.sh | bash && reboot
+    - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/bootstrap.ign /dev/vda
+    - snapshot
+  - run the command from console
+  - ssh and watch (ssh-keygen -R bootstrap)
+   - ssh core@bootstrap
+
+- master nodes
   - change MAC
   - start VM
-  - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/master.ign /dev/vda
-  - snapshot
-  - ssh and watch 
-- Start Workers
+  - Open the VM from console, type the following and take a snapshot, dont run the command now
+    - curl http://10.10.10.2:8081/master.sh | bash && reboot
+    - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/master.ign /dev/vda
+    - snapshot
+  - run the command from console
+  - ssh and watch (ssh-keygen -R )
+   - ssh core@
+
+- worker nodes
   - change MAC
   - start VM
-  - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/worker.ign /dev/vda
-  - snapshot
-  - ssh and watch 
+  - Open the VM from console, type the following and take a snapshot, dont run the command now
+    - curl http://10.10.10.2:8081/worker.sh | bash && reboot
+    - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/worker.ign /dev/vda
+    - snapshot
+  - run the command from console
+  - ssh and watch (ssh-keygen -R )
+   - ssh core@
 
 ##### 2.9 Wait for bootstrap complete
 ```bash
