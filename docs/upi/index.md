@@ -73,7 +73,7 @@ wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
 ```bash 
 cd ocp4-tools
 sudo dnf install dnsmasq haproxy jq chrony -y
-cp yq_linux_amd64 /usr/local/bin/yq
+sudo cp yq_linux_amd64 /usr/local/bin/yq
 sudo chmod +x /usr/local/bin/yq
 tar -xvzf oc-mirror.tar.gz
 sudo mv oc-mirror /usr/local/bin/
@@ -187,9 +187,6 @@ imageDigestSources:
 - mirrors:
   - quay.openshifty.duckdns.org:8443/devops/ocp4/openshift/release-images
   source: quay.io/openshift-release-dev/ocp-release
-- mirrors:
-  - quay.openshifty.duckdns.org:8443/devops/ocp4/compliance
-  source: registry.redhat.io/compliance
 ```
 
 ##### 2.6 geneate manifests and customize it
@@ -214,9 +211,24 @@ openshift-install create ignition-configs --dir=ocp4-install --log-level=debug
 ##### 2.8 Provision bootstrap + masters + workers
 - Make VM template with rhcos iso attached, allocate CPU, MEMORY and DISK, assure you enabled the hotplug/NUMA 
 - clone the template into cluster VMs and edit the MAC address
-- Start bootstrap node 
+- bootstrap node
+ - change MAC
+ - start VM
+ - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/bootstrap.ign /dev/vda
+ - snapshot
+ - ssh and watch 
 - Start master nodes
+ - change MAC
+ - start VM
+ - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/master.ign /dev/vda
+ - snapshot
+ - ssh and watch 
 - Start Workers
+ - change MAC
+ - start VM
+ - sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/worker.ign /dev/vda
+ - snapshot
+ - ssh and watch 
 
 ##### 2.9 Wait for bootstrap complete
 ```bash
