@@ -212,6 +212,23 @@ cp 99-master-chrony.yaml 99-worker-chrony.yaml ocp4-install/manifests/
 ##### 2.7 geneate ignition-configs
 ```bash
 ./openshift-install create ignition-configs --dir=ocp4-install --log-level=debug
+
+sudo cp ocp4-install/*ign /var/www/html/
+
+cat <<'_EOF_' | sudo tee /var/www/html/bootstrap.sh
+sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/bootstrap.ign /dev/vda
+_EOF_
+
+cat <<'_EOF_' | sudo tee /var/www/html/master.sh
+sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/master.ign /dev/vda
+_EOF_
+
+cat <<'_EOF_' | sudo tee /var/www/html/worker.sh
+sudo coreos-installer install --insecure-ignition --copy-network --ignition-url=http://10.10.10.2:8081/worker.ign /dev/vda
+
+sudo chown -R 755 /var/www/html/
+_EOF_
+
 ```
 
 ##### 2.8 Provision bootstrap + masters + workers
