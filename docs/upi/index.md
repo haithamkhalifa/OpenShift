@@ -62,8 +62,10 @@ curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/but
 curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.18.21/openshift-client-linux.tar.gz
 # dnsmasq configuration, DHCP and DNS
 curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/openshift.conf
+curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/dnsmasq-systemd-override.conf
 # HAproxy LoadBalancer configuration
 curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/haproxy.cfg
+curl -LO https://raw.githubusercontent.com/haithamkhalifa/OpenShift/refs/heads/master/examples/haproxy-systemd-override.conf
 # yq to parse and validate yaml files
 wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
 ```
@@ -77,6 +79,9 @@ tar -xvzf oc-mirror.tar.gz
 sudo mv oc-mirror /usr/local/bin/
 sduo cp openshift.conf /etc/dnsmasq.d/openshift.conf
 sudo cp haproxy.cfg /etc/haproxy/haproxy.cfg
+mkdir /etc/systemd/system/dnsmasq.service.d/ /etc/systemd/system/haproxy.service.d/
+sudo cp dnsmasq-systemd-override.conf /etc/systemd/system/dnsmasq.service.d/override.conf
+sudo cp haproxy-systemd-override.conf /etc/systemd/system/haproxy.service.d/override.conf 
 sudo systemctl enable --now dnsmasq
 sudo systemctl enable --now haproxy
 ```
@@ -151,6 +156,40 @@ oc adm release extract -a ${LOCAL_SECRET_JSON} \
 
 ##### 2.5 Create `install-config.yaml`
 ```yaml
+apiVersion: v1
+baseDomain: duckdns.org
+compute: 
+- hyperthreading: Enabled 
+  name: worker
+  replicas: 0 
+controlPlane: 
+  hyperthreading: Enabled 
+  name: master
+  replicas: 3 
+metadata:
+  name: openshifty
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14 
+    hostPrefix: 23 
+  networkType: OVNKubernetes 
+  serviceNetwork: 
+  - 172.30.0.0/16
+platform:
+  none: {} 
+fips: false 
+pullSecret: 'PULL_SECRET'
+sshKey: 'SSH_KEY'
+imageDigestSources:
+- mirrors:
+  - quay.openshifty.duckdns.org:8443/devops/ocp4/openshift/release
+  source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+- mirrors:
+  - quay.openshifty.duckdns.org:8443/devops/ocp4/openshift/release-images
+  source: quay.io/openshift-release-dev/ocp-release
+- mirrors:
+  - quay.openshifty.duckdns.org:8443/devops/ocp4/compliance
+  source: registry.redhat.io/compliance
 ```
 
 ##### 2.6 geneate manifests and customize it
